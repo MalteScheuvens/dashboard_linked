@@ -3,8 +3,12 @@ import plotly.express as px
 import pandas as pd
 from dash.dependencies import Input, Output
 
+import gunicorn
+from whitenoise import WhiteNoise
 
 app = Dash(__name__)
+server = app.server
+server.wsgi_app = WhiteNoise(server.wsgi_app, root='static/')
 
 colors = {
     'background': '#111111',
@@ -19,15 +23,7 @@ df = pd.DataFrame({
     "City":
         ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
 })
-'''
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 
-fig.update_layout(
-    plot_bgcolor=colors['background'],
-    paper_bgcolor=colors['background'],
-    font_color=colors['text']
-)
-'''
 app.layout = html.Div(style={'backgroundColor': colors['background']},
                       children=[
                           html.H1(
